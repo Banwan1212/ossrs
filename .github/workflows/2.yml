@@ -67,7 +67,7 @@ jobs:
           make package/srs/compile V=99
   
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: openwrt-plugin
           path: openwrt/bin/packages
