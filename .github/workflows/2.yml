@@ -43,7 +43,9 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   
       - name: Copy plugin source
         run: |
+          git clone https://github.com/sirpdboy/luci-app-netdata luci-app-netdata
           mkdir -p openwrt/package/ossrs
+          
           git clone https://github.com/Banwan1212/ossrs /package/ossrs
       - name: Update feeds
         run: |
