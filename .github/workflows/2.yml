@@ -47,8 +47,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   
       - name: Copy plugin source
         run: |
-          mkdir -p openwrt/package/srs
-          cp -r ./package/srs/* openwrt/package/srs/
+          
+          git clone https://github.com/Banwan1212/ossrs /package/srs/
   
       - name: Configure build
         run: |
