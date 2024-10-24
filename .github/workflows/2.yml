@@ -17,9 +17,9 @@ jobs:
     
     steps:
 
-      - name: Space cleanup
-        env:
-          DEBIAN_FRONTEND: noninteractive
+    - name: Space cleanup
+      env:
+        DEBIAN_FRONTEND: noninteractive
         run: |
           docker rmi `docker images -q`
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
@@ -30,23 +30,45 @@ jobs:
           sudo -E apt-get clean
           df -h
           
-      - name: Clone source code
-        run: |
+    - name: Clone source code
+      run: |
           git clone https://github.com/openwrt/openwrt
-      - name: Update feeds
-        run: |
+    - name: Update feeds
+      run: |
           cd openwrt
           ./scripts/feeds update -a                              
           ./scripts/feeds install -a
     
-      - name: Start SSH via tmate
-        uses: rdp-studio/ssh2actions@main
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   
+    - name: Start SSH via tmate
+      uses: rdp-studio/ssh2actions@main
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   
 
-      - name: Make download
-        run: |
+    - name: Copy plugin source
+      run: |
+        mkdir -p openwrt/package/srs
+        cp -r ./package/srs/* openwrt/package/srs/
 
+    - name: Configure build
+      run: |
+        cd openwrt
+        make defconfig
+        make menuconfig
 
+    - name: Build toolchain
+      run: |
+        cd openwrt
+        make toolchain/install
+
+    - name: Build plugin
+      run: |
+        cd openwrt
+        make package/srs/compile V=99
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: openwrt-plugin
+        path: openwrt/bin/packages
