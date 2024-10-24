@@ -45,3 +45,29 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   
+      - name: Copy plugin source
+        run: |
+          mkdir -p openwrt/package/srs
+          cp -r ./package/srs/* openwrt/package/srs/
+  
+      - name: Configure build
+        run: |
+          cd openwrt
+          make defconfig
+          make menuconfig
+  
+      - name: Build toolchain
+        run: |
+          cd openwrt
+          make toolchain/install
+  
+      - name: Build plugin
+        run: |
+          cd openwrt
+          make package/srs/compile V=99
+  
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: openwrt-plugin
+          path: openwrt/bin/packages
