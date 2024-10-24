@@ -3,9 +3,9 @@
 USE_PROCD=1
 START=99
 
-CONF="filebrowser"
-PROG="/usr/bin/filebrowser"
-DB_PATH="/etc/filebrowser/database.db"
+CONF="ossrs"
+PROG="/usr/bin/ossrs"
+DB_PATH="/etc/ossrs/database.db"
 
 start_service() {
 	config_load "$CONF"
