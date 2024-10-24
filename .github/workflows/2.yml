@@ -1,4 +1,4 @@
-name: lede-docker-oneCloud
+name: srs
 on:
   repository_dispatch:
   workflow_dispatch:
