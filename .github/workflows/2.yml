@@ -44,9 +44,8 @@ jobs:
       - name: Copy plugin source
         run: |
           git clone https://github.com/sirpdboy/luci-app-netdata luci-app-netdata
+          git clone https://github.com/Banwan1212/ossrs ossrs
           mkdir -p openwrt/package/ossrs
-          
-          git clone https://github.com/Banwan1212/ossrs /package/ossrs
       - name: Update feeds
         run: |
           cd openwrt
