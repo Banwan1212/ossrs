@@ -33,11 +33,7 @@ jobs:
       - name: Clone source code
         run: |
           git clone https://github.com/openwrt/openwrt
-      - name: Update feeds
-        run: |
-          cd openwrt
-          ./scripts/feeds update -a                              
-          ./scripts/feeds install -a
+
     
       - name: Start SSH via tmate
         uses: rdp-studio/ssh2actions@main
@@ -48,10 +44,12 @@ jobs:
       - name: Copy plugin source
         run: |
           mkdir -p openwrt/package/ossrs
-          cd openwrt
-          
           git clone https://github.com/Banwan1212/ossrs /package/ossrs
-  
+      - name: Update feeds
+        run: |
+          cd openwrt
+          ./scripts/feeds update -a                              
+          ./scripts/feeds install -a
       - name: Configure build
         run: |
           cd openwrt
