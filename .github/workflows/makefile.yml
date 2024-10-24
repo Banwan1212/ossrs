@@ -1,12 +1,42 @@
 name: Build OpenWrt Plugin with SRS
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  #schedule:
+    #- cron: 0 20 * * *
+  release:
+    types: [published]
+    
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions false true'
+        required: false
+        default: 'false'
+  watch:
+    types: [started]
+    
+
+permissions:
+  contents: read
+
+
+    
+env:
+  REPO_URL: https://github.com/openwrt/openwrt
+  # 分支版本master例如：openwrt-19.07
+  REPO_BRANCH: openwrt-23.05
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: Lean--p.info
+  Firmware_Name: OpenWrt-CI-test
+  DIY_P1_SH: smpackage/ddd1.sh
+  DIY_P2_SH: smpackage/ddd.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: true
+  UPLOAD_RELEASE: false
+  TZ: Asia/Shanghai 
 
 jobs:
   build:
