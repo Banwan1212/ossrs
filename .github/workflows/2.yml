@@ -48,7 +48,7 @@ jobs:
       - name: Copy plugin source
         run: |
           cd openwrt
-          git clone https://github.com/Banwan1212/ossrs /package/srs/
+          git clone https://github.com/Banwan1212/ossrs /package/ossrs
   
       - name: Configure build
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: Build plugin
         run: |
           cd openwrt
-          make package/srs/compile V=99
+          make package/ossrs/compile V=99
   
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
